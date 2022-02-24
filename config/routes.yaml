@@ -1,3 +1,16 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: App\Controller\TestController::index
+
+#test:
+#    path: /test/{age}
+#    #    path: /test/{age<\d+>?0}
+#    controller: App\Controller\TestController::test
+#    defaults:
+#        age: 0
+#    requirements:
+#        age: \d+
+#    methods: [GET]
+##    host: {subdomain}.monsite.com
+
+
