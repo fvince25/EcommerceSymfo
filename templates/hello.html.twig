@@ -1,6 +1,11 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {% include "_formateur.html.twig" with {"formateur": formateur1}%}
-    {% include "_formateur.html.twig" with {"formateur": formateur2}%}
+
+    {% set formateur = formateur1 %}
+    {% include "_formateur.html.twig" %}
+
+    {% set formateur = formateur2 %}
+    {% include "_formateur.html.twig" %}
+
 {% endblock %}
