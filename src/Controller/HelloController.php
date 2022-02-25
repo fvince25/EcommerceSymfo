@@ -54,10 +54,15 @@ class HelloController {
         $html = $twig->render(
             'hello.html.twig',
             [
-                'formateur' => [
+                'formateur1' => [
                     'prenom' => 'Lior',
                     'nom' => 'Chamla',
                     'age' => 33
+                ],
+                'formateur2' => [
+                    'prenom' => 'Bertrand',
+                    'nom' => 'Todo',
+                    'age' => 31
                 ]
             ]
         );
