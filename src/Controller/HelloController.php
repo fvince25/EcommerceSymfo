@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Controller;
+
+
+use App\Taxes\Calculator;
+use Cocur\Slugify\Slugify;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+
+class HelloController {
+
+    protected $logger;
+    protected $calculator;
+
+    public function __construct(LoggerInterface $logger, Calculator $calculator) {
+
+        $this->logger = $logger;
+        $this->calculator = $calculator;
+    }
+    /**
+     * @Route("/hello/{prenom?World}", name="hello", methods={"GET","POST"})
+     */
+    public function hello($prenom, Slugify $slugyfy) {
+
+        // Comme Slugyfy vient d'une bibliothèque tierce (téléchargée de packagist (composer require cocur/slugify)) ,
+        // ça ne fonctionnera que s'il est déclaré dans services.yaml
+        // Et comme ça on se le fait livrer ;-)
+
+        dump($slugyfy->slugify("Hello World"));
+        dump($this->calculator->calcul(100));
+        $this->logger->error("Mon Message de Log !");
+        return new Response("hello $prenom");
+
+    }
+
+    /**
+     * @Route("/hello2/{prenom}", name="hello2", methods={"GET","POST"})
+     */
+    public function hello2(LoggerInterface $logger, Calculator $calc, $prenom = "World") {
+        // On peut passer le logger uniquement sur une route.
+        $logger->alert("hello 2");
+        dump($calc->calcul(200));
+        return new Response("hello $prenom");
+
+    }
+
+}

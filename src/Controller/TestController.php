@@ -13,12 +13,6 @@ class TestController {
 
     }
 
-    /**
-     * @param Request $request
-     * @param $age
-     * @return Response
-     * @Route("/test/{age<\d+>?0}", name="test")
-     */
     public function test(Request $request, $age) {
 
         // (argument resolver)
