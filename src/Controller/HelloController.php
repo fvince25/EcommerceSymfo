@@ -7,13 +7,14 @@ use App\Taxes\Detector;
 use App\Taxes\Calculator;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 
-class HelloController {
+class HelloController extends abstractController {
 
     protected $logger;
     protected $calculator;
@@ -49,9 +50,9 @@ class HelloController {
     /**
      * @Route("/hello2/{prenom}", name="hello2", methods={"GET","POST"})
      */
-    public function hello2(Environment $twig, $prenom = "world") {
+    public function hello2($prenom = "world") {
 
-        $html = $twig->render(
+        return $this->render(
             'hello.html.twig',
             [
                 'formateur1' => [
@@ -66,7 +67,6 @@ class HelloController {
                 ]
             ]
         );
-        return new Response($html);
 
     }
 
