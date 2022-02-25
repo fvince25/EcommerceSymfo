@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Salut</title>
+</head>
+<body>
+    <h1>Hello {{ prenom }} !</h1>
+    <p>Vous avez {{ age }} ans</p>
+    {% if age >= 18 %}
+        <p>Vous êtes un adulte</p>
+    {% else %}
+        <p>Vous êtes un mineur</p>
+    {% endif %}
+
+    <ul>
+        {% for personne in prenoms %}
+            <li>{{ personne | upper}}</li>
+        {% endfor %}
+    </ul>
+
+
+    <ul>
+        {% for i in 1..10 %}
+            <li>Numéro {{ i }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

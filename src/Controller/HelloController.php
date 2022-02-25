@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 
 class HelloController {
@@ -48,11 +49,21 @@ class HelloController {
     /**
      * @Route("/hello2/{prenom}", name="hello2", methods={"GET","POST"})
      */
-    public function hello2(LoggerInterface $logger, Calculator $calc, $prenom = "World") {
-        // On peut passer le logger uniquement sur une route.
-        $logger->alert("hello 2");
-        dump($calc->calcul(200));
-        return new Response("hello $prenom");
+    public function hello2(Environment $twig, $prenom = "world") {
+
+        $html = $twig->render(
+            'hello.html.twig',
+            [
+                'prenom' => $prenom,
+                'age' => 17,
+                'prenoms' => [
+                    'Lior',
+                    'Magali',
+                    'Vincent'
+                ]
+            ]
+        );
+        return new Response($html);
 
     }
 

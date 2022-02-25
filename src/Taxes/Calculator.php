@@ -13,7 +13,6 @@ class Calculator {
     public function __construct(LoggerInterface $logger, float $tva) {
         // Dans le services.yaml, on a indiqué que le paramètre inconnu tva (qui ne peut pas être automatiquement injecté)
         // sera valorisé à 20.
-        dump($tva);
         $this->logger = $logger;
         $this->tva = $tva;
     }
