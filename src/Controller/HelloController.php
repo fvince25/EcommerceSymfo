@@ -2,19 +2,16 @@
 
 namespace App\Controller;
 
-
 use App\Taxes\Detector;
 use App\Taxes\Calculator;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Twig\Environment;
 
 
-class HelloController extends abstractController {
+
+class HelloController extends AbstractController {
 
     protected $logger;
     protected $calculator;
