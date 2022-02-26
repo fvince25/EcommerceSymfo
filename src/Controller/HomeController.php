@@ -19,7 +19,7 @@ class HomeController extends AbstractController {
         // en injection, on peut créer une instance directement à partir de EntityManagerInterface :
         //$productRepository = $em->getRepository(Product::class);
 
-        $product = $productRepository->find(3);
+        // $product = $productRepository->find(3);
 
 //        $product->setPrice(2500);
 
@@ -37,13 +37,13 @@ class HomeController extends AbstractController {
         // Les opérations de suppressions sont gérées dans le entitymanager et non le repository !!!!
 
         // Préparation de la suppression
-        $em->remove($product);
-        $em->flush();
+        //$em->remove($product);
+        //$em->flush();
 
-        dd($product);
+        //dd($product);
 
-        $count = $productRepository->count(['price' => 1500]);
-        dump($count);
+        //$count = $productRepository->count(['price' => 1500]);
+        // dump($count);
         return $this->render('home.html.twig');
     }
 
