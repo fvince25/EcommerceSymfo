@@ -1,0 +1,51 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Accueil
+{% endblock %}
+
+{% block body %}
+    <h1>Nos produits phares</h1>
+    <div class="row">
+        {% for i in 1..3 %}
+            <div class="col">
+                <div class="card">
+                    <img src="https://picsum.photos/200/100" alt="Image du produit" class="img-fluid">
+                    <div class="card-body">
+                        <h4 class="card-title">Superbe chaise en Bois</h4>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
+                            animi
+                            deserunt dolor odio velit voluptates. A alias at autem deserunt distinctio facere fugiat
+                            itaque laborum molestiae perferendis</p>
+                        <a href="#" class="btn btn-primary btn-sm">Détails</a>
+                        <a href="#" class="btn btn-success btn-sm">Ajouter</a>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+    <hr>
+    <h2>Un service irreprochable</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aperiam consequatur ex itaque modi
+        natus nesciunt nostrum quos, unde veniam. Adipisci quam quibusdam quis soluta. Accusantium at cum dolores
+        veritatis.</p>
+    <div class="row">
+        {% include "shared/_assurance.html.twig" with {
+            'color': 'primary',
+            'icone': 'fas fa-truck',
+            'texte': "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse id mollitia nam quas qui, quia vero. Aut blanditiis ipsam iusto."
+        } %}
+        {% include "shared/_assurance.html.twig" with {
+            'color': 'success',
+            'icone': 'fas fa-check',
+            'texte': "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse id mollitia nam quas qui, quia vero. Aut blanditiis ipsam iusto."
+        } %}
+        {% include "shared/_assurance.html.twig" with {
+            'color': 'warning',
+            'icone': 'fas fa-lock',
+            'texte': "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse id mollitia nam quas qui, quia vero. Aut blanditiis ipsam iusto."
+        } %}
+    </div>
+{% endblock %}
+
