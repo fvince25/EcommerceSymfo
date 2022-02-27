@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -14,12 +15,14 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProductController extends AbstractController
 {
@@ -79,19 +82,14 @@ class ProductController extends AbstractController
     /**
      * @Route("/admin/product/create",name="product_create")
      */
-    public function create(FormFactoryInterface $factory, Request $request, ProductRepository $productRepository)
+    public function create(FormFactoryInterface $factory,
+                           Request $request,
+                           SluggerInterface $slugger,
+                            EntityManagerInterface $entityManager)
     {
 
-//        CategoryRepository $categoryRepository
-//        utile seulement si on passe par les catégories livrées dans la façon artisanale
-//        $categories = $categoryRepository->findAll();
-//        $options = [];
-//
-//        foreach ($categories as $category) {
-//            $options[$category->getName()] = $category->getId();
-//        }
 
-        $builder = $factory->createBuilder(FormType::class,null,[
+        $builder = $factory->createBuilder(FormType::class, null, [
             'data_class' => Product::class
         ]);
 
@@ -112,6 +110,10 @@ class ProductController extends AbstractController
                     'placeholder' => 'Tapez le prix du produit en €'
                 ]
             ])
+            ->add('mainPicture', UrlType::class, [
+                'label' => 'Image du produit',
+                'attr' => ['placeholder' => 'Tapez une URLd\'image !']
+            ])
             ->add('category', EntityType::class, [
                 'label' => 'Catégorie',
                 'attr' => [],
@@ -120,48 +122,19 @@ class ProductController extends AbstractController
                 'choice_label' => 'name'
 
             ]);
-        // Dans la dernière façon de faire on prends tout, ce qu'on ne veut pas forcément
 
-        // A moins d'avoir une selection en call back du genre :
-
-        //'choice_label' => function() {Category $category) {
-        // return strtoupper($category->getName())
-        //}
-
-        // Ou alors on utilise du DQL :::
-
-
-        // Category::class vient de App/Entity.
-
-        // Façon plus artisanale permet d'avoir la selection exacte :
-
-//        ->add('category', choiceType::class, [
-//        'label' => 'Catégorie',
-//        'attr' => [],
-//        'placeholder' => 'Choisir une catégorie',
-//        'choices' => $options
-//    ]);
 
         $form = $builder->getForm();
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
 
-            $data = $form->getData();
+            $product = $form->getData();
+            $product->setSlug(strtolower($slugger->slug($product->getName())));
+            $entityManager->persist($product);
+            $entityManager->flush();
 
-            // Cas où on ne passe pas par 'data_class' => Product::class dans le builder.
-//            $product = new Product;
-//
-//            $product->setName($data['name'])
-//                ->setShortDescription($data['shortDescription'])
-//                ->setPrice($data['price'])
-//                ->setCategory($data['category']);
-
-            dd($product);
         }
-
-
 
         $formView = $form->createView();
 
