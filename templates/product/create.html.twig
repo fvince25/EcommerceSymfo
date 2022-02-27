@@ -1,0 +1,79 @@
+{% extends "base.html.twig" %}
+
+{# {% form_theme formView _self %} #}
+
+{# Valable pour un fichier, mais en le mettant dans le fichier de config config/packages/twig.yaml
+c'est valable pour tous les forms #}
+{# {% form_theme formView 'bootstrap_4_layout.html.twig' %} #}
+
+{% block body %}
+
+    <h1>Nouveau Produit</h1>
+
+    {# {{ form(formView) }} #}
+
+    {{ form_start(formView) }}
+    {{ form_errors(formView) }}
+
+    {# {{ form_widget(formView) }} #}
+
+    <div class="row">
+        <div class="col">
+            {{ form_row(formView.name) }}
+            {{ form_row(formView.price) }}
+        </div>
+        <div class="col">
+            {{ form_row(formView.shortDescription) }}
+            {{ form_row(formView.category) }}
+        </div>
+    </div>
+
+    {# On peut très bien avoir des paramètres dans widget, pour éviter d'avoir des classes dans le controlleur.
+
+      form_widget(formView.name, {'attr': {'class':'form-constrol'}) #}
+
+    {# {{ form_row(formView.name) }} #}
+
+    {# {{ form_label(formView.name) }} #}
+    {# {{ form_errors(formView.name) }} #}
+    {# {{ form_widget(formView.name) }} #}
+    {# {{ form_help(formView.name) }} #}
+
+    {# <span>Gna gna gna</span> #}
+
+    <div class="row">
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i>
+        Créer le produit
+    </button>
+
+    {{ form_end(formView) }}
+
+    {# Pour en savoir plus sur la form customization : #}
+
+    {# https://symfony.com/doc/current/form/form_customization.html #}
+
+{% endblock %}
+
+{% block title %}
+    Create Produit
+{% endblock %}
+
+
+
+{# form devient une variable du form_theme #}
+{# On redéfinit form_row #}
+
+{# Des blocks peuvent être appelés depuis le fichier #}
+
+{# {% block form_row %} #}
+{# <div class="form-group"> #}
+{# {{ form_label(form) }} #}
+{# {{ form_widget(form, {'attr': {'class' : 'form-control'}}) }} #}
+{# {{ form_help(form) }} #}
+{# {{ form_errors(form) }} #}
+{# </div> #}
+{# {% endblock %} #}
