@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -83,31 +84,75 @@ class ProductController extends AbstractController
     /**
      * @Route("/admin/product/create",name="product_create")
      */
-    public function create(FormFactoryInterface $factory,
-                           Request $request,
+    public function create(Request $request,
                            SluggerInterface $slugger,
                             EntityManagerInterface $entityManager)
     {
-
-
-//        $builder = $factory->createBuilder(ProductType::class);
-//        $form = $builder->getForm();
-
-        $form = $this->createForm(ProductType::class);
+        $product = new Product;
+        $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
 
-            $product = $form->getData();
+//          $product = $form->getData(); inutile si on passe un new product dans le createform.
             $product->setSlug(strtolower($slugger->slug($product->getName())));
             $entityManager->persist($product);
             $entityManager->flush();
-
         }
 
         $formView = $form->createView();
 
         return $this->render('product/create.html.twig', [
+            'formView' => $formView
+        ]);
+
+    }
+
+    /**
+     * @Route("/admin/product/{id}/edit",name="product_edit")
+     */
+    public function edit($id, ProductRepository $productRepository,
+                         Request $request,
+                         EntityManagerInterface $entityManager,
+                         UrlGeneratorInterface $urlGenerator)
+    {
+
+        $product = $productRepository->find($id);
+
+        $form = $this->createForm(ProductType::class, $product);
+//        $form->setData($product); on enlève car le $product est passé dans le createform
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+
+            // $product = $form->getData();
+            // est inutile, car le formulaire travaille directement sur l'objet product
+
+//            $product->setSlug(strtolower($slugger->slug($product->getName())));
+            // Apparement, il ne faut pas changer le slug, il reste permaent au cas ou qqn acéderait directement au produit via l'url.
+            // Pour moi c'est discutable ...
+
+            $entityManager->flush();
+
+//            $url = $urlGenerator->generate('product_show', [
+//                'category_slug' => $product->getCategory()->getSlug(),
+//                'slug' => $product->getSlug()
+//            ]);
+//            return $this->redirect($url);
+                    // Ou bien :
+//            return new RedirectResponse($url);
+
+            return $this->redirectToRoute('product_show', [
+                'category_slug' => $product->getCategory()->getSlug(),
+                'slug' => $product->getSlug()
+            ]);
+        }
+
+        $formView = $form->createView();
+
+        return $this->render('product/edit.html.twig', [
+            'product' => $product,
             'formView' => $formView
         ]);
 
