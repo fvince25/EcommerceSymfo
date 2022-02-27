@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Form\ProductType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -89,42 +90,10 @@ class ProductController extends AbstractController
     {
 
 
-        $builder = $factory->createBuilder(FormType::class, null, [
-            'data_class' => Product::class
-        ]);
+//        $builder = $factory->createBuilder(ProductType::class);
+//        $form = $builder->getForm();
 
-        $builder->add('name', TextType::class, [
-            'label' => 'Nom du produit',
-            'attr' => [
-                'placeholder' => 'Tapez le nom du produit']
-        ])
-            ->add('shortDescription', TextareaType::class, [
-                'label' => 'Description courte',
-                'attr' => [
-                    'placeholder' => 'Tapez la description du produit'
-                ]
-            ])
-            ->add('price', MoneyType::class, [
-                'label' => 'Prix du produit ',
-                'attr' => [
-                    'placeholder' => 'Tapez le prix du produit en €'
-                ]
-            ])
-            ->add('mainPicture', UrlType::class, [
-                'label' => 'Image du produit',
-                'attr' => ['placeholder' => 'Tapez une URLd\'image !']
-            ])
-            ->add('category', EntityType::class, [
-                'label' => 'Catégorie',
-                'attr' => [],
-                'placeholder' => '-- Choisir une catégorie --',
-                'class' => Category::class,
-                'choice_label' => 'name'
-
-            ]);
-
-
-        $form = $builder->getForm();
+        $form = $this->createForm(ProductType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
