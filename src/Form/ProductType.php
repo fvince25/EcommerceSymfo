@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\DataTransformer\CentimesTransformer;
+use App\Form\Type\PriceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -37,7 +38,9 @@ class ProductType extends AbstractType
                 'label' => 'Prix du produit ',
                 'attr' => [
                     'placeholder' => 'Tapez le prix du produit en €'
-                ]
+                ],
+                'divisor' => 100
+//                existe seulement pour le moneytype !!!
             ])
             ->add('mainPicture', UrlType::class, [
                 'label' => 'Image du produit',
@@ -53,7 +56,7 @@ class ProductType extends AbstractType
 
 
         // Transformation d'une donnée au moment de la réception et de l'envoi de données :
-        $builder->get('price')->addModelTransformer(new CentimesTransformer());
+//        $builder->get('price')->addModelTransformer(new CentimesTransformer());
 
     }
 
