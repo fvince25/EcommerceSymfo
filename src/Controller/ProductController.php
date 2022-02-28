@@ -82,10 +82,6 @@ class ProductController extends AbstractController
             'product' => $product
         ]);
 
-//        return $this->render('product/show.html.twig', [
-//            'product' => $product,
-//            'urlGenerator' => $urlGenerator
-//        ]);
     }
 
     /**
@@ -99,7 +95,7 @@ class ProductController extends AbstractController
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $product->setSlug(strtolower($slugger->slug($product->getName())));
             $entityManager->persist($product);
@@ -127,11 +123,7 @@ class ProductController extends AbstractController
     {
 
         $product = $productRepository->find($id);
-        $form = $this->createForm(ProductType::class, $product, [
-            'validation_groups' => ['with-price', 'Default']
-        ]);
-        // Seules les classes qui ont le groupe with-price seront soumis à la validation.
-
+        $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
