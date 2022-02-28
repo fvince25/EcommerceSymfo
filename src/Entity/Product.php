@@ -28,7 +28,7 @@ class Product
     private $name;
 
     /**
-     * @Assert\NotBlank(message="Le prix du produit est obligatoire")
+     * @Assert\NotBlank(message="Le prix du produit est obligatoire", groups={"with-price"})
      * @ORM\Column(type="integer")
      */
     private $price;
@@ -63,7 +63,7 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -75,7 +75,7 @@ class Product
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(?int $price): self
     {
         $this->price = $price;
 

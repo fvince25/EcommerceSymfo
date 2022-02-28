@@ -125,22 +125,16 @@ class ProductController extends AbstractController
                          Request $request,
                          EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-        $product = new Product;
-        $product->setName("Toto");
-        $resultat = $validator->validate($product);
-
-        if ($resultat->count() > 0) {
-            dd("il y a des erreurs", $resultat);
-        } else {
-            dd("Pas d'erreurs");
-        }
 
         $product = $productRepository->find($id);
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, [
+            'validation_groups' => ['with-price', 'Default']
+        ]);
+        // Seules les classes qui ont le groupe with-price seront soumis à la validation.
+
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             return $this->redirectToRoute('product_show', [
                 'category_slug' => $product->getCategory()->getSlug(),
