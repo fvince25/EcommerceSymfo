@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Product;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -50,42 +51,23 @@ class ProductType extends AbstractType
             ]);
 
 
-        // Exemple d'utilisation des eventlisters sur les forms :
-        // C'est à titre d'exemple : L'utilisation dans le cas de transformation de données est dévoyée.
+        $builder->get('price')->addModelTransformer(new CallbackTransformer(function ($value) {
 
-//        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-//            $product = $event->getData();
-//        });
-//
-//        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-//            $product = $event->getData();
-//        });
+            // Callback au moment de recevoir les données juste avant l'affichage (transformation)
+            if ($value === null) {
+                return;
+            }
+            return $value / 100;
 
-        // $builder->addEventListener('form.pre_set_data');
-        // EN dur ce n'est pas conseillé : Si le nom change d'une version de symfony à l'autre on sera embêté.
+        }, function ($value) {
+            // Callback au moment d'envoyer les données après submit !! (reverse transformation)
+            if ($value === null) {
+                return;
+            }
+            return $value * 100;
+        }));
 
-        // Exemple d'addeventlistener (EXEMPLE si on ne veut pas ajouter category si on est en edit)
-
-//        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-//
-//            $form = $event->getForm();
-//            /**
-//             * @var Product
-//             */
-//            $product = $event->getData();
-//            // Normalement avec un bon éditeur,
-//            // ce qui n'est pas le cas ici, on devrait avoir la connaissance des méthodes de products
-//
-//            if($product->getId() === null) {
-//                $form->add('category', EntityType::class, [
-//                    'label' => 'Catégorie',
-//                    'attr' => [],
-//                    'placeholder' => '-- Choisir une catégorie --',
-//                    'class' => Category::class,
-//                    'choice_label' => 'name'
-//                ]);
-//            }
-//        });
+//        $builder->get('price')->addViewTransformer();
 
     }
 
