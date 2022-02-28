@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 // Utile pour quand on a pas mal de classes qui viennent du même espace de nom.
-use Symfony\Component\Validator\Constraints as assert;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
@@ -21,11 +21,14 @@ class Product
     private $id;
 
     /**
+     * @Assert\NotBlank(message="Le nom du produit est obligatoire !")
+     * @Assert\Length(min=3, max=255, minMessage="Le nom du produit doit avoir au moins 3 caractères", maxMessage="Talala")
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message="Le prix du produit est obligatoire")
      * @ORM\Column(type="integer")
      */
     private $price;
@@ -49,25 +52,6 @@ class Product
      * @ORM\Column(type="text")
      */
     private $shortDescription;
-
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraints('name', [
-                new assert\NotBlank(['message' => 'Le nom du produit est obligatoire']),
-                new assert\Length([
-                    'min' => 3,
-                    'max' => 255,
-                    'minMessage' => 'Le nom du produit doit contenir au moins 3 caractères'
-                ])
-            ]
-        );
-
-        $metadata->addPropertyConstraint('price',
-            new assert\NotBlank([
-                'message' => 'Le prix du produit est obligatoire'
-            ])
-        );
-    }
 
     public function getId(): ?int
     {
