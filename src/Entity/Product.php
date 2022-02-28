@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
+// Utile pour quand on a pas mal de classes qui viennent du même espace de nom.
+use Symfony\Component\Validator\Constraints as assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
@@ -53,8 +53,8 @@ class Product
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         $metadata->addPropertyConstraints('name', [
-                new NotBlank(['message' => 'Le nom du produit est obligatoire']),
-                new Length([
+                new assert\NotBlank(['message' => 'Le nom du produit est obligatoire']),
+                new assert\Length([
                     'min' => 3,
                     'max' => 255,
                     'minMessage' => 'Le nom du produit doit contenir au moins 3 caractères'
@@ -63,7 +63,7 @@ class Product
         );
 
         $metadata->addPropertyConstraint('price',
-            new NotBlank([
+            new assert\NotBlank([
                 'message' => 'Le prix du produit est obligatoire'
             ])
         );
