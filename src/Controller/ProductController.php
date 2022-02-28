@@ -94,10 +94,13 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted()) {
 
-//          $product = $form->getData(); inutile si on passe un new product dans le createform.
             $product->setSlug(strtolower($slugger->slug($product->getName())));
             $entityManager->persist($product);
             $entityManager->flush();
+            return $this->redirectToRoute('product_show', [
+                'category_slug' => $product->getCategory()->getSlug(),
+                'slug' => $product->getSlug()
+            ]);
         }
 
         $formView = $form->createView();
@@ -118,31 +121,12 @@ class ProductController extends AbstractController
     {
 
         $product = $productRepository->find($id);
-
         $form = $this->createForm(ProductType::class, $product);
-//        $form->setData($product); on enlève car le $product est passé dans le createform
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
 
-            // $product = $form->getData();
-            // est inutile, car le formulaire travaille directement sur l'objet product
-
-//            $product->setSlug(strtolower($slugger->slug($product->getName())));
-            // Apparement, il ne faut pas changer le slug, il reste permaent au cas ou qqn acéderait directement au produit via l'url.
-            // Pour moi c'est discutable ...
-
             $entityManager->flush();
-
-//            $url = $urlGenerator->generate('product_show', [
-//                'category_slug' => $product->getCategory()->getSlug(),
-//                'slug' => $product->getSlug()
-//            ]);
-//            return $this->redirect($url);
-                    // Ou bien :
-//            return new RedirectResponse($url);
-
             return $this->redirectToRoute('product_show', [
                 'category_slug' => $product->getCategory()->getSlug(),
                 'slug' => $product->getSlug()
