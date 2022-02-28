@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Form\DataTransformer\CentimesTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -51,23 +52,8 @@ class ProductType extends AbstractType
             ]);
 
 
-        $builder->get('price')->addModelTransformer(new CallbackTransformer(function ($value) {
-
-            // Callback au moment de recevoir les données juste avant l'affichage (transformation)
-            if ($value === null) {
-                return;
-            }
-            return $value / 100;
-
-        }, function ($value) {
-            // Callback au moment d'envoyer les données après submit !! (reverse transformation)
-            if ($value === null) {
-                return;
-            }
-            return $value * 100;
-        }));
-
-//        $builder->get('price')->addViewTransformer();
+        // Transformation d'une donnée au moment de la réception et de l'envoi de données :
+        $builder->get('price')->addModelTransformer(new CentimesTransformer());
 
     }
 
