@@ -125,62 +125,12 @@ class ProductController extends AbstractController
                          Request $request,
                          EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-
-        // Validadtion d'une collection complexe :
-
-        $client = [
-            'nom' => '',
-            'prenom' => 'Lior',
-            'voiture' => [
-                'marque' => '',
-                'couleur' => 'Noir'
-            ]
-        ];
-
-        $collection = new Collection([
-            'nom' => new NotBlank(['message' => "Le nom ne doit pas être vide !"]),
-            'prenom' => [
-                new NotBlank(['message' => "Le prénom ne doit pas être vide"]),
-                new Length([
-                    'min' => 3,
-                    'minMessage' => "Le prénom de doit pas fiare moins de 3 caractères"
-                ])
-            ],
-            'voiture' => new Collection([
-                'marque' => new NotBlank(['message' => 'La marque de la voiture est onligatoire']),
-                'couleur' => new NotBlank([
-                    'message' => 'La couleur de la voiture est obligatoire'
-                ])
-            ])
-        ]);
-
-        $resultat = $validator->validate($client, $collection);
+        $product = new Product;
+        $product->setName("Toto");
+        $resultat = $validator->validate($product);
 
         if ($resultat->count() > 0) {
-            dump("il y a des erreurs");
-            dd($resultat);
-        } else {
-            dd("Pas d'erreurs");
-        }
-
-
-
-        // Validation d'un scalaire simple :
-
-        $age = 200;
-        $resultat = $validator->validate($age, [
-            new LessThanOrEqual([
-                'value' => 120,
-                'message' => "L'âge doit être inférieur à {{ compared_value }} mais vous avez donné {{ value }}"
-            ]),
-            new GreaterThanOrEqual([
-                'value' => 0,
-                'message' => "L'age doit être supérieur à 0"
-            ])
-        ]);
-
-        if ($resultat->count() > 0) {
-            dd("il y a des erreurs");
+            dd("il y a des erreurs", $resultat);
         } else {
             dd("Pas d'erreurs");
         }
