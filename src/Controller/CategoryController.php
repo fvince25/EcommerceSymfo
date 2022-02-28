@@ -17,6 +17,28 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryController extends AbstractController
 {
+
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
+
+    // Attention, cette fonction n'est pas une route, du coup, on ne peut pas y injecter des services comme on le fait pour une route.
+    // Il faut passer par un constructeur.
+    public function renderMenuList()
+    {
+
+        $categories = $this->categoryRepository->findAll();
+
+        return $this->render('category/_menu.html.twig', [
+            'categories' => $categories
+        ]);
+    }
+
+
     /**
      * @Route("/admin/category/create", name="category_create")
      */
