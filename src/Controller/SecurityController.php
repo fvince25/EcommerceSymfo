@@ -20,11 +20,11 @@ class SecurityController extends AbstractController
 //        $form = $this->createForm(LoginType::class, ['email' => $utils->getLastUsername()]);
         $form = $factory->createNamed('', LoginType::class,['_username' => $utils->getLastUsername()]);
 
-
-
         $formview = $form->createView();
-        dump($utils->getLastAuthenticationError(), $utils->getLastUsername());
+
         // Si on ne fait rien dans le LoginFormAuthenticator (onAuthenticationFailure), cette fonction ne marchera pas.
+
+        // Attention la méthode getLastAuthenticationError "consomme" son contenu, il est vide après exécution
 
         return $this->render('security/login.html.twig', [
             'formView' => $formview,
