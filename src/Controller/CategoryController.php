@@ -77,15 +77,23 @@ class CategoryController extends AbstractController
         EntityManagerInterface $entityManager,
         Security $security): Response
     {
-        $user = $security->getUser();
+        // Raccourci de l'abstractController : $this->
+        $user = $this->getUser();
+//        $user = $security->getUser();
 
         if($user === null) {
             return $this->redirectToRoute('security_login');
         }
 
-        if (!in_array("ROLE_ADMIN",$user->getRoles())) {
+        // Raccourci de l'abstractController :
+
+        if (!$this->isGranted("ROLE_ADMIN")) {
             throw new AccessDeniedHttpException("Vous n'avez pas le droit à cette ressource");
         }
+
+//        if (!$security->isGranted("ROLE_ADMIN")) {
+//            throw new AccessDeniedHttpException("Vous n'avez pas le droit à cette ressource");
+//        }
         $category = $categoryRepository->find($id);
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
