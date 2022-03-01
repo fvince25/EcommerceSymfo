@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -70,7 +71,6 @@ class CategoryController extends AbstractController
 
     /**
      * @Route("/admin/category/{id}/edit", name="category-edit")
-     * @IsGranted("ROLE_ADMIN", message="Vous n'avez pas le droite d'accéder à cette ressource")
      */
     public function edit(
         $id,
@@ -79,6 +79,21 @@ class CategoryController extends AbstractController
         EntityManagerInterface $entityManager): Response
     {
         $category = $categoryRepository->find($id);
+
+        if(!$category) {
+            throw new NotFoundHttpException("Cette catégorie n'existe pas");
+        }
+
+        $user = $this->getUser();
+
+        if(!$user) {
+            return $this->redirectToRoute("security_login");
+        }
+
+        if ($user !== $category->getOwner()) {
+           throw new AccessDeniedHttpException("Vous n'êtes pas proprio de cette catégorie");
+        }
+
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
 
