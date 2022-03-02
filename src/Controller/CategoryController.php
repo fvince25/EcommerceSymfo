@@ -71,6 +71,7 @@ class CategoryController extends AbstractController
 
     /**
      * @Route("/admin/category/{id}/edit", name="category-edit")
+     * @IsGranted("CAN_EDIT", subject="id", message="Vous n'êtes pas le propriétaire de cette catégorie")
      */
     public function edit(
         $id,
@@ -84,7 +85,7 @@ class CategoryController extends AbstractController
             throw new NotFoundHttpException("Cette catégorie n'existe pas");
         }
 
-        $this->denyAccessUnlessGranted('CAN_EDIT', $category, "Vous n'êtes pas le propriétaire de cette catégorie");
+//        $this->denyAccessUnlessGranted('CAN_EDIT', $category, "Vous n'êtes pas le propriétaire de cette catégorie");
 
 //        $user = $this->getUser();
 //
