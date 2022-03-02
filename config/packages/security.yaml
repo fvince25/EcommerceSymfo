@@ -18,14 +18,14 @@ security:
             anonymous: true
             lazy: true
             provider: app_user_provider
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
-#            form_login:
-#                login_path: security_login
-#                check_path: security_login
-#                username_parameter: login[email]
-#                password_parameter: login[password]
+#            guard:
+#                authenticators:
+#                    - App\Security\LoginFormAuthenticator
+            form_login:
+                login_path: security_login
+                check_path: security_login
+                username_parameter: login[email]
+                password_parameter: login[password]
             logout:
                 path: security_logout
 
@@ -38,5 +38,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-#         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
