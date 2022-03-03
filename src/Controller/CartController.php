@@ -33,7 +33,6 @@ class CartController extends AbstractController
             $cart[$id] = 1;
         }
 
-//        $request->getSession()->set('cart', $cart);
         $session->set('cart', $cart);
 
         /**
@@ -43,24 +42,11 @@ class CartController extends AbstractController
 
         // Ajoute des messages à la pile
         $flashBag->add('success',"Le produit a bien été ajouté au panier");
-        $flashBag->add('info',"info 1");
-        $flashBag->add('info',"info 2");
-        $flashBag->add('warning',"warning");
-
-        // Lit le message et dépile le message comme un répondeur. ça fait remove
-//        dump($flashBag->get('warning'));
-
-//        dd($session->getBag('flashes'));
 
         return $this->redirectToRoute('product_show', [
             'category_slug' => $product->getCategory()->getSlug(),
             'slug' => $product->getSlug()
         ]);
 
-        //        $request->getSession()->remove('cart');
-
-//        return $this->render('cart/add.html.twig', [
-//            'controller_name' => 'CartController',
-//        ]);
     }
 }
