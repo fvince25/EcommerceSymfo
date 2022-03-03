@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,7 +17,7 @@ class CartController extends AbstractController
     /**
      * @Route("/cart/add/{id}", name="cart_add", requirements={"id":"\d+"})
      */
-    public function add($id, ProductRepository $productRepository, SessionInterface $session): Response
+    public function add($id, ProductRepository $productRepository, SessionInterface $session, FlashBagInterface $flashBag): Response
     {
 //        $cart = $request->getSession()->get('cart', []);
         $cart = $session->get('cart', []);
@@ -35,13 +36,12 @@ class CartController extends AbstractController
 
         $session->set('cart', $cart);
 
-        /**
-         * @var FlashBag
-         */
-        $flashBag = $session->getBag('flashes');
-
         // Ajoute des messages à la pile
-        $flashBag->add('success',"Le produit a bien été ajouté au panier");
+
+        $this->addFlash('success', "Le produit a bien été ajouté au panier");
+
+        // Technique injection de dépendance FlashBagInterface $flashBag
+        //$flashBag->add('success',"Le produit a bien été ajouté au panier");
 
         return $this->redirectToRoute('product_show', [
             'category_slug' => $product->getCategory()->getSlug(),
