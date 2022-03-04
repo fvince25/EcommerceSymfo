@@ -17,7 +17,8 @@
                 <tr>
                     <td>{{ p.id }}</td>
                     <td>{{ p.address }}<br>{{ p.postalCode }}, {{ p.city }}</td>
-                    <td>TODO</td>
+{#                    <td>{{ p.purchasedAt.format('d/m/Y') }}</td>#}
+                    <td>{{ p.purchasedAt | date('d/m/Y H:i') }}</td>
                     <td>{{ p.total/100 }} € </td>
                 </tr>
             {% endfor %}
