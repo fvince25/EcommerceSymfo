@@ -6,40 +6,58 @@
 
 {% block body %}
     <h1>Votre panier</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Produit</th>
-                <th>Prix</th>
-                <th>Quantité</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% dump(items) %}
-            {% for item in items %}
+    {% if items | length > 0 %}
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        {{ item.product.name }}
-                    </td>
-                    <td>
-                        {{ item.product.price }}
-                    </td>
-                    <td>
-                        {{ item.qty }}
-                    </td>
-                    <td>
-                        {{ item.qty * item.product.price }}
-                    </td>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3">Total :</td>
-                <td>{{ total }}</td>
-            </tr>
-        </tfoot>
-    </table>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>
+                            {{ item.product.name }}
+                        </td>
+                        <td>
+                            {{ item.product.price }}
+                        </td>
+                        <td>
+                            <a href="{{ path("cart_decremente", {'id': item.product.id }) }}" class="btn btn-warning">
+                                <i class="fas fa-minus"></i>
+                            </a>
+                            <a href="{{ path('cart_add', {'id': item.product.id}) }}?returnToCart=true"
+                               class="btn btn-warning">
+                                <i class="fas fa-plus">
+                                </i>
+                            </a>
+                            {{ item.qty }}
+                        </td>
+                        <td>
+                            {{ item.total }}
+                        </td>
+                        <td>
+                            <a href="{{ path('cart_delete', {'id': item.product.id }) }}" class="btn btn-warning">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Total :</td>
+                    <td>{{ cartService.total }}</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    {% else %}
+        <h2>Votre panier est vide</h2>
+    {% endif %}
+
 {% endblock %}
 
