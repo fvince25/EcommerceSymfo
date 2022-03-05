@@ -60,14 +60,15 @@ class Product
     private $shortDescription;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Purchase::class, mappedBy="products")
+     * @ORM\OneToMany(targetEntity=PurchaseItem::class, mappedBy="product")
      */
-    private $purchases;
+    private $purchaseItems;
 
     public function __construct()
     {
-        $this->purchases = new ArrayCollection();
+        $this->purchaseItems = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -147,27 +148,30 @@ class Product
     }
 
     /**
-     * @return Collection<int, Purchase>
+     * @return Collection<int, PurchaseItem>
      */
-    public function getPurchases(): Collection
+    public function getPurchaseItems(): Collection
     {
-        return $this->purchases;
+        return $this->purchaseItems;
     }
 
-    public function addPurchase(Purchase $purchase): self
+    public function addPurchaseItem(PurchaseItem $purchaseItem): self
     {
-        if (!$this->purchases->contains($purchase)) {
-            $this->purchases[] = $purchase;
-            $purchase->addProduct($this);
+        if (!$this->purchaseItems->contains($purchaseItem)) {
+            $this->purchaseItems[] = $purchaseItem;
+            $purchaseItem->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removePurchase(Purchase $purchase): self
+    public function removePurchaseItem(PurchaseItem $purchaseItem): self
     {
-        if ($this->purchases->removeElement($purchase)) {
-            $purchase->removeProduct($this);
+        if ($this->purchaseItems->removeElement($purchaseItem)) {
+            // set the owning side to null (unless already changed)
+            if ($purchaseItem->getProduct() === $this) {
+                $purchaseItem->setProduct(null);
+            }
         }
 
         return $this;

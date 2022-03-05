@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Purchase;
+use App\Entity\PurchaseItem;
 use App\Entity\User;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Cocur\Slugify\Slugify;
@@ -105,12 +106,19 @@ class AppFixtures extends Fixture
                 ->setTotal(mt_rand(2000,30000))
                 ->setPurchasedAt($faker->dateTimeBetween('-6 months'));
 
+            $selectedProducts = $faker->randomElements($products, mt_rand(3, 5));
 
-            for ($i = 0 ; $i < mt_rand(1,4) ; $i++) {
-                $purchase->addProduct($faker->randomElement($products));
+            foreach ($selectedProducts as $product) {
+                $purchaseItem = new PurchaseItem;
+                $purchaseItem->setProduct($product)
+                    ->setQuantity(mt_rand(1, 3))
+                    ->setPurchase($purchase)
+                    ->setProductName($product->getName())
+                    ->setProductPrice($product->getPrice())
+                    ->setTotal($purchaseItem->getProductPrice() * $purchaseItem->getQuantity());
+
+                $manager->persist($purchaseItem);
             }
-
-//                ->setUser($users[mt_rand(0,sizeof($users))]);
 
             // Avec un argument dans boolean, on indique un random true/false
             if ($faker->boolean(90)) {
