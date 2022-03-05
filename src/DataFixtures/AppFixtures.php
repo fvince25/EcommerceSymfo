@@ -39,6 +39,7 @@ class AppFixtures extends Fixture
         // $slugify = new Slugify();
 
 
+        $products = [];
         for ($c = 0; $c < 3; $c++) {
 
             $category = new Category();
@@ -58,6 +59,8 @@ class AppFixtures extends Fixture
                     ->setCategory($category)
                     ->setShortDescription($faker->paragraph)
                     ->setMainPicture($faker->imageUrl(400, 400, true));
+
+                $products[] = $product;
 
                 $manager->persist($product);
             }
@@ -101,6 +104,11 @@ class AppFixtures extends Fixture
                 ->setUser($faker->randomElement($users))
                 ->setTotal(mt_rand(2000,30000))
                 ->setPurchasedAt($faker->dateTimeBetween('-6 months'));
+
+
+            for ($i = 0 ; $i < mt_rand(1,4) ; $i++) {
+                $purchase->addProduct($faker->randomElement($products));
+            }
 
 //                ->setUser($users[mt_rand(0,sizeof($users))]);
 
