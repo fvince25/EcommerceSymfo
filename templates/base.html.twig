@@ -8,10 +8,11 @@
     {% block stylesheets %}
         <link rel="stylesheet" href="https://bootswatch.com/5/darkly/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+        <link href="/assets/css/styles.css" rel="stylesheet" type="text/css"/>
     {% endblock %}
 
     {% block javascripts %}
-        {# {{ encore_entry_script_tags('app') }} #}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     {% endblock %}
 </head>
 <body>
@@ -20,5 +21,30 @@
         {% include "shared/_info.html.twig" %}
         {% block body %}{% endblock %}
     </div>
+    {% block jquery %}
+        <script>
+            $(function () {
+
+
+                $("[data_ajax='ajaxCall']").click(function (event) {
+                        event.preventDefault();
+                        $.ajax({url: $(this).attr('href') + "?ajaxCall=true"});
+                    }
+                )
+            })
+
+            $(document).ajaxSuccess(function (event, request, settings) {
+                let response = JSON.parse(request.responseText);
+                console.log(response, response['type']);
+
+                if (response['type'] === "info") {
+                    $('#ajaxReceive')
+                        .toggleClass("noDisplay")
+                        .html(response['message']);
+                }
+            });
+
+        </script>
+    {% endblock %}
 </body>
 </html>

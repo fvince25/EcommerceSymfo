@@ -7,20 +7,25 @@ use App\Cart\CartService;
 use App\Form\CartConfirmationType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 
 class CartController extends AbstractController
 {
     /**
      * @Route("/cart/add/{id}", name="cart_add", requirements={"id":"\d+"})
      */
-    public function add($id, ProductRepository $productRepository, CartService $cartService, Request $request): Response
+    public function add($id, ProductRepository $productRepository, CartService $cartService, Request $request, RouterInterface $router): Response
     {
+
+        $coming_route = $request->headers->get('referer');
 
         $product = $productRepository->find($id);
 
@@ -30,16 +35,34 @@ class CartController extends AbstractController
 
         $cartService->add($id);
 
-        $this->addFlash('success', "Le produit a bien été ajouté au panier");
+        if($request->query->get('ajaxCall')) {
+            return $this->json([
+                'code' => 200,
+                'type' => 'info',
+                'categoryInfo' => 'success',
+                'message' => "Le produit a bien été ajouté au panier"
+            ]);
+        } else {
+            $this->addFlash('success', "Le produit a bien été ajouté au panier");
 
-        if($request->query->get('returnToCart')) {
-            return $this->redirectToRoute("cart_show");
+            if($request->query->get('returnToCart')) {
+                return $this->redirectToRoute("cart_show");
+            }
+
         }
 
-        return $this->redirectToRoute('product_show', [
-            'category_slug' => $product->getCategory()->getSlug(),
-            'slug' => $product->getSlug()
-        ]);
+
+
+
+
+
+
+        return new RedirectResponse($coming_route);
+
+//        return $this->redirectToRoute('product_show', [
+//            'category_slug' => $product->getCategory()->getSlug(),
+//            'slug' => $product->getSlug()
+//        ]);
 
     }
 
