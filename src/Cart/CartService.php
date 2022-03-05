@@ -48,6 +48,9 @@ class CartService
 
     }
 
+    /**
+     * @return array<CartItem>
+     */
     public function getDetailedCartItems() : array {
 
         $detailedCart = [];
@@ -72,6 +75,10 @@ class CartService
         unset($cart[$id]);
         $this->session->set('cart', $cart);
 
+    }
+
+    public function remove_cart() {
+        $this->session->set('cart', []);
     }
 
     public function decremente($id) {

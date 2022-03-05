@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Cart\CartService;
+use App\Form\CartConfirmationType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,13 +49,18 @@ class CartController extends AbstractController
     public function show(CartService $cartService)
     {
 
+        $form = $this->createForm(CartConfirmationType::class);
+
         $detailedCart = $cartService->getDetailedCartItems();
         $total = $cartService->getTotal();
 
         return $this->render('cart/index.html.twig', [
             'items' => $detailedCart,
-            'total' => $total
+            'total' => $total,
+            'confirmationForm' => $form->createView()
         ]);
+
+        // $form->createView() beaucoup plus spécialisé dans l'affichage que formview.
     }
 
     /**
@@ -63,14 +69,11 @@ class CartController extends AbstractController
     public function delete($id, ProductRepository $productRepository, CartService $cartService) {
 
         $product = $productRepository->find($id);
-
         if(!$product) {
             throw $this->createNotFoundException("Le produit $id n'existe pas et ne peut pas être supprimé !");
         }
         $cartService->remove($id);
-
         $this->addFlash('warning', "Le produit a bien été retiré au panier");
-
         return $this->redirectToRoute('cart_show');
 
     }
