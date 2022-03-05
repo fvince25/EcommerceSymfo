@@ -68,6 +68,11 @@ class CartService
 
     }
 
+    protected function saveCart(array $cart)
+    {
+        $this->session->set('cart', $cart);
+    }
+
     public function remove($id)
     {
 
@@ -77,8 +82,8 @@ class CartService
 
     }
 
-    public function remove_cart() {
-        $this->session->set('cart', []);
+    public function empty() {
+        $this->saveCart([]);
     }
 
     public function decremente($id) {
