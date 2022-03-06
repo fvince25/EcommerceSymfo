@@ -10,6 +10,7 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+#        très important pour déclarer des subscribers !
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -39,27 +40,8 @@ services:
 
     Cocur\Slugify\Slugify: ~
 
-    App\EventDispatcher\PrenomListener:
-        tags: [
-            {
-                name: kernel.event_listener,
-                event: kernel.request,
-                method: addPrenomToAttributes
-            },
-            {
-                name: kernel.event_listener,
-                event: kernel.request,
-                method: test1
-            },
-            {
-                name: kernel.event_listener,
-                event: kernel.response,
-                method: test2
-            }
-        ]
+#    App\EventDispatcher\PrenomSubscriber:
+#        autoconfigure: false
 
-#         quand le container de service se charge, quand il voit ce service là,
-#    il est taggé event listener, donc je vais le présenter auprès du dispatcher,
-#    je vais aussi dire qu dispatcher, on a besoin qu'il appelle la méthode addPrenomToAttributes.
-
-#    A chaque fois que kernel.request est appelé la méthode get prénom est ajouté à la request !!
+#    Si on met à false le subscriber n'est plus visible dans
+#    php bin/console debug:event-dispatcher kernel.response
