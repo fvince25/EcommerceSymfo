@@ -38,3 +38,16 @@ services:
             $seuil: 100
 
     Cocur\Slugify\Slugify: ~
+
+    App\EventDispatcher\PrenomListener:
+        tags: [ {
+            name: kernel.event_listener,
+            event: kernel.request,
+            method: addPrenomToAttributes
+        } ]
+
+#         quand le container de service se charge, quand il voit ce service là,
+#    il est taggé event listener, donc je vais le présenter auprès du dispatcher,
+#    je vais aussi dire qu dispatcher, on a besoin qu'il appelle la méthode addPrenomToAttributes.
+
+#    A chaque fois que kernel.request est appelé la méthode get prénom est ajouté à la request !!

@@ -58,13 +58,15 @@ class ProductController extends AbstractController
     /**
      * @Route("/{category_slug}/{slug}", name="product_show", priority="-1")
      */
-    public function show($slug, $category_slug,
+    public function show($slug, $prenom, $category_slug,
                          ProductRepository $productRepository,
-                         CategoryRepository $categoryRepository
+                         CategoryRepository $categoryRepository,
+                         Request $request
     )
     {
 //        UrlGeneratorInterface $urlGenerator
 
+        dd($prenom);
         $category = $categoryRepository->findOneBy([
             'slug' => $category_slug
         ]);
