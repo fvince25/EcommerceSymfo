@@ -45,3 +45,8 @@ services:
 
 #    Si on met à false le subscriber n'est plus visible dans
 #    php bin/console debug:event-dispatcher kernel.response
+
+# Récapitulatif sur les évènements du kernel :
+# kernel.request : Lancé au moment où on reçoit la requête, il permet de la manipuler.
+# kernel.controller : Lancé au moment où on sait quelle fonction de controller est appelé. (kerne
+# kernel.response : Lancé au moment où on conaît le response à renvoyer au navigateur.
