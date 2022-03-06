@@ -82,6 +82,10 @@ class PurchaseConfirmationController extends AbstractController {
         $purchaseEvent = new PurchaseSuccessEvent($purchase);
         $eventDispatcher->dispatch($purchaseEvent, 'purchase.success');
 
+        // Les évènements sont là pour nous faire respecter les principes SOLID.
+        // Dans le cas présent, si on a à envoyer un sms au lieu d'un email plus tard,
+        // on ne touche pas à la classe du controller.
+
         // 9. Redirection vers l'index.
         return $this->redirectToRoute("purchase_index");
 
