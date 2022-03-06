@@ -66,7 +66,6 @@ class ProductController extends AbstractController
     {
 //        UrlGeneratorInterface $urlGenerator
 
-        dd($prenom);
         $category = $categoryRepository->findOneBy([
             'slug' => $category_slug
         ]);

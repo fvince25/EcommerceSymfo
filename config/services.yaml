@@ -40,11 +40,23 @@ services:
     Cocur\Slugify\Slugify: ~
 
     App\EventDispatcher\PrenomListener:
-        tags: [ {
-            name: kernel.event_listener,
-            event: kernel.request,
-            method: addPrenomToAttributes
-        } ]
+        tags: [
+            {
+                name: kernel.event_listener,
+                event: kernel.request,
+                method: addPrenomToAttributes
+            },
+            {
+                name: kernel.event_listener,
+                event: kernel.request,
+                method: test1
+            },
+            {
+                name: kernel.event_listener,
+                event: kernel.response,
+                method: test2
+            }
+        ]
 
 #         quand le container de service se charge, quand il voit ce service là,
 #    il est taggé event listener, donc je vais le présenter auprès du dispatcher,
