@@ -75,6 +75,10 @@ class Purchase
         $this->purchaseItems = new ArrayCollection();
     }
 
+
+    // L'inconvénient avec les lifecycle callbacks est qu'on ne peut pas
+    // utiliser le container de service pour injecter des services.
+
     /**
      * @ORM\PrePersist
      */
