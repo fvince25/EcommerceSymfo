@@ -106,7 +106,10 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $product->setSlug(strtolower($slugger->slug($product->getName())));
+//            $product->setSlug(strtolower($slugger->slug($product->getName())));
+            // On retire l'ajout du slug : ce n'est plus nécéssaire car on a un doctrine listener
+            // qui le fait automatiquement !!!
+
             $entityManager->persist($product);
             $entityManager->flush();
             return $this->redirectToRoute('product_show', [
