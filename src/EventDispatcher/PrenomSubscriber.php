@@ -24,11 +24,11 @@ class PrenomSubscriber implements EventSubscriberInterface {
     }
 
     public function test1() {
-        dump("test 1");
+
     }
 
     public function test2() {
-        dump("test 2");
+
     }
 }
 
