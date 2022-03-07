@@ -73,6 +73,10 @@ class PurchaseItem
     public function setPurchase(?Purchase $purchase): self
     {
         $this->purchase = $purchase;
+        // Ca devient un peu compliqué !! Mais c'est pour faire une liaison bijective
+        if(!$purchase->getPurchaseItems()->contains($this)) {
+            $purchase->addPurchaseItem($this);
+        }
 
         return $this;
     }
