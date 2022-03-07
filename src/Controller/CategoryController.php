@@ -57,7 +57,7 @@ class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $category->setSlug(strtolower($slugger->slug($category->getName())));
+//            $category->setSlug(strtolower($slugger->slug($category->getName())));
             $entityManager->persist($category);
             $entityManager->flush();
             return $this->redirectToRoute('homepage');

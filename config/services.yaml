@@ -41,13 +41,25 @@ services:
     Cocur\Slugify\Slugify: ~
 
     #Etant donné qu'on passe par le dispatcher de doctrine et non celui de symfony, il faut déclarer le service dans services.yaml
+
     App\Doctrine\Listener\ProductSlugListener:
-        tags: [{
-#            name: 'doctrine.event_listener',
-            name: 'doctrine.orm.entity_listener',
-            event: prePersist,
-            entity: App\Entity\Product
-        }]
+        tags: [
+            {
+                name: 'doctrine.orm.entity_listener',
+                event: prePersist,
+                entity: App\Entity\Product
+            }
+        ]
+
+    App\Doctrine\Listener\CategorySlugListener:
+        tags: [
+            {
+                name: 'doctrine.orm.entity_listener',
+                event: prePersist,
+                entity: App\Entity\Category
+            }
+        ]
+
 
 #    App\EventDispatcher\PrenomSubscriber:
 #        autoconfigure: false
