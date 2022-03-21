@@ -4,6 +4,7 @@
 namespace App\EventDispatcher;
 use App\Event\ProductViewEvent;
 use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -33,10 +34,14 @@ class ProductViewSubscriber implements EventSubscriberInterface
 
     public function sendViewProductEmail(ProductViewEvent $productViewEvent) {
 
-        $email = new Email();
+        $email = new TemplatedEmail();
         $email->from(new Address("contact@mail.com", "Infos de la boutique"))
             ->to("admin@mail.com")
             ->text("Un visiteur est en train de voir la page du produit n°".$productViewEvent->getProduct()->getId())
+            ->htmlTemplate('emails/product_view.html.twig')
+            ->context([
+                'product' => $productViewEvent->getProduct()
+            ])
             ->subject("Visite du produit n°".$productViewEvent->getProduct()->getId());
 
         $this->mailer->send($email);
